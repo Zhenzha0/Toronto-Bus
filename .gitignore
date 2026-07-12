@@ -1,0 +1,17 @@
+# Secrets / local config
+.env
+
+# Landed data + per-run metadata (keep the folders, ignore their contents)
+/data/raw/*
+/data/lineage/*
+!/data/raw/.gitkeep
+!/data/lineage/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor
+.DS_Store

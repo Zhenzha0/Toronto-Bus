@@ -1,0 +1,21 @@
+# Defines the services that make up the project. For now: just the database.
+# The Python "pipeline" service gets added in Phase 6, behind a profile.
+
+services:
+  db:
+    image: postgres:16                     # official Postgres 16 image, pulled from Docker Hub
+    container_name: ttc_db                 # stable name so you can `docker exec ttc_db ...`
+    env_file: .env                         # load POSTGRES_* from .env into the container
+    ports:
+      - "${POSTGRES_PORT}:5432"            # map host <POSTGRES_PORT> -> container 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data    # persist DB files in a named volume (survives restarts)
+    healthcheck:
+      # pg_isready returns success only once Postgres is actually accepting connections
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:                                  # declares the named volume used above
