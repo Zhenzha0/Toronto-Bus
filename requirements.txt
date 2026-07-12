@@ -1,0 +1,5 @@
+# Python dependencies. Kept minimal and pinned for reproducibility.
+# More get added as later phases need them (e.g. requests, openpyxl).
+
+psycopg2-binary==2.9.10   # PostgreSQL driver for Python
+python-dotenv==1.0.1      # load .env into environment variables
