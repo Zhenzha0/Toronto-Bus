@@ -8,7 +8,7 @@ Usage:
 import argparse
 
 import config
-from pipeline import db
+from pipeline import db, ingest
 
 # The DDL files that build the schema structure, in the order they must run.
 DDL_FILES = [
@@ -37,11 +37,20 @@ def reset():
     run_ddl()
 
 
+def run_ingest(local=False):
+    """Download source files into data/raw (or reuse existing ones with --local)."""
+    if local:
+        print("Stage: ingest (local mode - reusing files already in data/raw)")
+        return
+    print("Stage: ingest")
+    ingest.run()
+
+
 def main():
     parser = argparse.ArgumentParser(description="TTC data pipeline")
     parser.add_argument(
         "--stage",
-        choices=["ddl"],   # later phases add: ingest, bronze, silver, gold
+        choices=["ddl", "ingest"],   # later phases add: bronze, silver, gold
         help="run a single stage",
     )
     parser.add_argument(
@@ -49,15 +58,25 @@ def main():
         action="store_true",
         help="drop and recreate all schemas from scratch",
     )
+    parser.add_argument(
+        "--local",
+        action="store_true",
+        help="skip network; reuse files already in data/raw",
+    )
     args = parser.parse_args()
 
     if args.reset:
         reset()
-    elif args.stage == "ddl":
+
+    if args.stage == "ddl":
         run_ddl()
-    else:
-        # No flags: for now just run the DDL. Later this becomes the full pipeline.
+    elif args.stage == "ingest":
+        run_ddl()                       # ensure schemas/ingestion_log exist first
+        run_ingest(local=args.local)
+    elif args.stage is None and not args.reset:
+        # No stage given: run the full pipeline (so far: ddl + ingest).
         run_ddl()
+        run_ingest(local=args.local)
 
     print("Done.")
 

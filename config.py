@@ -30,3 +30,18 @@ DATABASE_URL = (
     f"host={DB_HOST} port={DB_PORT} dbname={DB_NAME} "
     f"user={DB_USER} password={DB_PASSWORD}"
 )
+
+# --- Data source (CKAN open-data API) ---
+CKAN_HOST = "https://ckan0.cf.opendata.inter.prod-toronto.ca"
+DATASET_GTFS = "ttc-routes-and-schedules"
+DATASET_DELAY = "ttc-bus-delay-data"
+
+# --- Local landing paths ---
+DATA_DIR = PROJECT_ROOT / "data"
+RAW_DIR = DATA_DIR / "raw"
+
+# --- Load scope ---
+# FULL_LOAD=true loads every delay year; otherwise only SAMPLE_YEARS (fast iteration).
+FULL_LOAD = os.environ.get("FULL_LOAD", "false").lower() == "true"
+SAMPLE_YEARS = [2024]                      # used when FULL_LOAD is false
+DELAY_YEARS_FULL = list(range(2014, 2026))  # 2014..2025 (2025 = rolling file)
