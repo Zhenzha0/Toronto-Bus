@@ -4,3 +4,4 @@
 psycopg2-binary==2.9.10   # PostgreSQL driver for Python
 python-dotenv==1.0.1      # load .env into environment variables
 requests==2.32.3          # HTTP client: call the CKAN API and download files
+openpyxl==3.1.5           # read the .xlsx delay files
