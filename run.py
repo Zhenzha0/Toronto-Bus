@@ -8,7 +8,7 @@ Usage:
 import argparse
 
 import config
-from pipeline import bronze, db, ingest, silver
+from pipeline import bronze, db, gold, ingest, silver
 
 # The DDL files that build the schema structure, in the order they must run.
 DDL_FILES = [
@@ -59,11 +59,17 @@ def run_silver():
     silver.run()
 
 
+def run_gold():
+    """Rebuild the gold analysis result tables from silver."""
+    print("Stage: gold")
+    gold.run()
+
+
 def main():
     parser = argparse.ArgumentParser(description="TTC data pipeline")
     parser.add_argument(
         "--stage",
-        choices=["ddl", "ingest", "bronze", "silver"],   # later phases add: gold
+        choices=["ddl", "ingest", "bronze", "silver", "gold"],
         help="run a single stage",
     )
     parser.add_argument(
@@ -91,12 +97,15 @@ def main():
         run_bronze()
     elif args.stage == "silver":
         run_silver()
+    elif args.stage == "gold":
+        run_gold()
     elif args.stage is None and not args.reset:
-        # No stage given: run the full pipeline (so far: ddl -> ingest -> bronze -> silver).
+        # No stage given: run the full pipeline: ddl -> ingest -> bronze -> silver -> gold.
         run_ddl()
         run_ingest(local=args.local)
         run_bronze()
         run_silver()
+        run_gold()
 
     print("Done.")
 
