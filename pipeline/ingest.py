@@ -1,7 +1,8 @@
-"""Ingestion: resolve which source files to pull from the CKAN API.
+"""Ingestion stage.
 
-(Downloading + unzipping is added in the next piece; for now this module
-only figures out WHAT to download.)
+Resolve the current download URLs from the CKAN API, download the GTFS ZIP
+and the yearly delay files into data/raw, unzip the GTFS tables, and write a
+manifest.json describing everything that was fetched.
 """
 
 import hashlib
