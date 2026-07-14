@@ -144,5 +144,6 @@ Everything is set through `.env` (see `.env.example`):
 
 ## Design notes & assumptions
 
-See the accompanying write-up for the architecture, the interpretation of each
-question, data-quality findings, and productionization steps.
+See the [design write-up](docs/TTC_Pipeline_Writeup.pdf) for the architecture
+diagram, the interpretation of each question, the data-quality findings, and the
+design decisions.
