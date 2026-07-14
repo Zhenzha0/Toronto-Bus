@@ -5,7 +5,9 @@ DROP TABLE IF EXISTS silver.delay CASCADE;
 CREATE TABLE silver.delay AS
 SELECT
     report_date::date            AS report_date,
-    NULLIF(TRIM(route), '')      AS route,          -- keep as text; joins to route_short_name
+    -- Leading route number only: the 2025 feed stores "102 MARKHAM ROAD", older
+    -- years store "89". Extracting the number lets all years join to GTFS.
+    NULLIF(substring(TRIM(route) from '^[0-9]+'), '') AS route,
     time,
     day,
     NULLIF(TRIM(location), '')   AS location,

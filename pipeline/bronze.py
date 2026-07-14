@@ -74,11 +74,11 @@ DELAY_COLUMNS = [
 # handling the drift across years: "Delay"/"Min Delay", "Date"/"Report Date".
 HEADER_MAP = {
     "date": "report_date", "report date": "report_date",
-    "route": "route",
+    "route": "route", "line": "route",              # 2025 feed renamed Route -> Line
     "time": "time",
     "day": "day",
-    "location": "location",
-    "incident": "incident",
+    "location": "location", "station": "location",  # 2025: Location -> Station
+    "incident": "incident", "code": "incident",      # 2025: Incident -> Code (a code, not text)
     "delay": "min_delay", "min delay": "min_delay",
     "gap": "min_gap", "min gap": "min_gap",
     "direction": "direction", "bound": "direction",
