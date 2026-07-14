@@ -95,6 +95,10 @@ The three answers land in the `gold` schema:
 | Q2 – most scheduled route | `gold.route_trip_counts` (top row) |
 | Q3 – avg delay | `gold.avg_delay` (and `gold.avg_delay_by_route`) |
 
+The SQL that answers all three questions is in
+[`analysis/sample_queries.sql`](analysis/sample_queries.sql) — run that file (see
+below) to print the three answers at once.
+
 ### Option 1 — VS Code (browse the medallion schemas visually)
 
 Install two extensions (Extensions panel, `Ctrl+Shift+X`):

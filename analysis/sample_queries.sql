@@ -1,5 +1,6 @@
 -- ============================================================================
 -- Sample route-analysis queries (read-only) against the pipeline's output.
+-- Answers the three required questions, plus one extra ranking.
 --
 -- Run after the pipeline has populated the gold tables, e.g.:
 --   docker exec -i ttc_db psql -U ttc -d ttc < analysis/sample_queries.sql
@@ -7,17 +8,21 @@
 -- ============================================================================
 
 
--- Average number of stops per route.
+-- Q1: average number of stops per route.
 SELECT * FROM gold.avg_stops_per_route;
 
 
--- Most frequently scheduled routes (top 10 by trip count).
+-- Q2: most frequently scheduled routes (top 10 by trip count).
 SELECT route_short_name, route_long_name, trip_count
 FROM gold.route_trip_counts
 LIMIT 10;
 
 
--- Least reliable routes: highest average delay, minimum 100 delay records.
+-- Q3: average delay across all routes.
+SELECT * FROM gold.avg_delay;
+
+
+-- Extra: least reliable routes (highest average delay, min 100 delay records).
 SELECT route, avg_delay_minutes, delay_records
 FROM gold.avg_delay_by_route
 WHERE delay_records >= 100
