@@ -11,22 +11,19 @@ def connect():
 
 
 def run_sql_file(path):
-    """Run every statement in a .sql file as ONE transaction.
-
-    Either all statements succeed and are committed together, or if any
-    statement fails, the whole thing is rolled back (nothing is applied).
-    """
+    """Run a whole .sql file in one transaction: everything commits together,
+    or rolls back together if any statement fails."""
     sql = path.read_text(encoding="utf-8")
 
     conn = connect()
     try:
         with conn.cursor() as cur:
-            cur.execute(sql)      # send the SQL to Postgres
-        conn.commit()             # make the changes permanent
+            cur.execute(sql)
+        conn.commit()             # success -> save the changes
     except Exception:
-        conn.rollback()           # undo everything if any statement failed
-        raise                     # re-raise so the caller sees the error
+        conn.rollback()           # failure -> undo the whole file
+        raise
     finally:
-        conn.close()              # always release the connection
+        conn.close()
 
     print(f"  ran {path.name}")

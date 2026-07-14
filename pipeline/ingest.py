@@ -22,7 +22,7 @@ def ckan_package(slug):
     """Fetch a dataset's metadata (including its resource list) from CKAN."""
     url = config.CKAN_HOST + "/api/3/action/package_show"
     resp = requests.get(url, params={"id": slug}, timeout=30)
-    resp.raise_for_status()          # turn any HTTP error into an exception
+    resp.raise_for_status()          # raise on any HTTP error
     return resp.json()["result"]
 
 
@@ -85,7 +85,7 @@ def download_resource(res, dest_path):
         with open(dest_path, "wb") as f:
             for chunk in resp.iter_content(chunk_size=65536):
                 f.write(chunk)
-                sha.update(chunk)     # feed each chunk into the running fingerprint
+                sha.update(chunk)     # hash the bytes as they stream past
     return sha.hexdigest()
 
 

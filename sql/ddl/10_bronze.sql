@@ -2,10 +2,9 @@
 -- Data tables mirror the source file headers exactly, ALL COLUMNS TEXT (no
 -- casting happens here) plus an _ingested_at lineage timestamp.
 
--- One row is written every time we consider loading a source resource.
--- It records what we loaded and when, so a re-run can SKIP a download whose
--- source data has not changed since last time. This is the heart of idempotent
--- ingestion.
+-- Watermark table: one row per resource load, recording what was loaded, when,
+-- and its last_modified/checksum. Meant to let a future run skip a resource
+-- whose source hasn't changed (the skip logic itself is not wired up yet).
 CREATE TABLE IF NOT EXISTS bronze.ingestion_log (
     id             BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,  -- surrogate key
     dataset        TEXT        NOT NULL,          -- CKAN dataset slug

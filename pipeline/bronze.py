@@ -39,7 +39,7 @@ def _copy_file(cur, table, columns, file_path):
     """Stream one CSV file into a table using COPY (skipping its header row)."""
     col_list = ", ".join(columns)
     sql = f"COPY {table} ({col_list}) FROM STDIN WITH (FORMAT csv, HEADER true)"
-    with open(file_path, "rb") as f:      # binary stream = fast, no decode overhead
+    with open(file_path, "rb") as f:      # binary = faster, skips decoding
         cur.copy_expert(sql, f)
 
 
@@ -70,8 +70,8 @@ DELAY_COLUMNS = [
     "incident", "min_delay", "min_gap", "direction", "vehicle",
 ]
 
-# Map a normalized source header (stripped + lowercased) -> canonical column.
-# This absorbs the drift: "Delay"/"Min Delay", "Date"/"Report Date", etc.
+# Maps a normalized header (stripped + lowercased) to our canonical column,
+# handling the drift across years: "Delay"/"Min Delay", "Date"/"Report Date".
 HEADER_MAP = {
     "date": "report_date", "report date": "report_date",
     "route": "route",
