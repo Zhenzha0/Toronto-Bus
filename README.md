@@ -80,6 +80,11 @@ python run.py --stage silver                 # a single stage
 | `python run.py --local` | Skip downloading; reuse files already in `data/raw/` |
 | `FULL_LOAD=true python run.py` | Load all delay years instead of the 2024 sample |
 
+> **Switching load scope:** delay data is reloaded per year (delete-then-reload),
+> so going from the full set back to a smaller sample leaves the earlier years'
+> rows in the database. Run `python run.py --reset` when you change scope to start
+> from clean schemas.
+
 ## Viewing the results
 
 The three answers land in the `gold` schema:
