@@ -1,0 +1,12 @@
+# Don't copy these into the image build context.
+.venv/
+venv/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+.env
+data/
+docs/
+*.md
+.vscode/

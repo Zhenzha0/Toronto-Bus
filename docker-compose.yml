@@ -17,5 +17,20 @@ services:
       timeout: 5s
       retries: 10
 
+  # The Python pipeline, containerized. Behind a profile so `docker compose up`
+  # starts only the DB by default; opt in with `--profile pipeline`.
+  pipeline:
+    build: .
+    profiles: ["pipeline"]
+    env_file: .env
+    environment:
+      # Inside the compose network, reach Postgres by its service name, not localhost.
+      POSTGRES_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy         # wait until Postgres passes its healthcheck
+    volumes:
+      - ./data:/app/data                   # keep landed files on the host, shared with the run
+
 volumes:
   pgdata:                                  # declares the named volume used above
